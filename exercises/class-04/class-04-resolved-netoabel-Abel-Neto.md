@@ -231,7 +231,7 @@ be-mean-pokemons> db.pokemons.find(query)
 Fetched 7 record(s) in 3ms
 ```
 
-## Listando todos os pokemóns que possuem a skill `investida` e cuja defesa não seja menor ou igual a 49
+## Listando todos os pokemóns que possuam a skill `investida` e cuja defesa não seja menor ou igual a 49
 
 ```
 be-mean-pokemons> var skillsQuery = { skills: { $in: [/investida/i] } }
