@@ -16,7 +16,7 @@ WriteResult({
 })
 ```
 
-## Adicionando a skill `desvio` a tpdos os pokemóns
+## Adicionando a skill `desvio` a todos os pokemóns
 
 ```
 be-mean-pokemons> var query = {}
