@@ -35,7 +35,7 @@ WriteResult({
 
 ```
 be-mean-pokemons> var query = { name: /aindanaoexistemon/i }
-be-mean-pokemons> var modifier = { $set: { description: "Sem maiores informações" }, $setOnInsert: { attack: null, defense: null, heigh: null, type: null } }
+be-mean-pokemons> var modifier = { $set: { description: "Sem maiores informações" }, $setOnInsert: { name: 'Aindanaoexistemon', attack: null, defense: null, heigh: null, type: null } }
 be-mean-pokemons> var options = { upsert: true }
 be-mean-pokemons> db.pokemons.update(query, modifier, options)
 Updated 1 new record(s) in 2ms
