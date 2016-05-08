@@ -1,4 +1,4 @@
-# MongoDB - Aula 03 - Exercício
+# MongoDB - Aula 04 - Exercício
 Autor: Abel Neto
 
 ## Adicionando duas skills aos pokemóns `Pikachu`, `Squirtle`, `Bulbassaur` e `Charmander`
