@@ -1,5 +1,6 @@
 # MongoDB - Aula 06 - Exercício
 User: [netoabel](http://www.github.com/netoabel)
+
 Autor: Abel Neto
 
 ## Fazer uma query para o campo name utilizando `explain` para ver o resultado da busca
