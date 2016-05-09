@@ -1,4 +1,5 @@
 # MongoDB - Aula 05 - Exercício
+User: [netoabel](http://www.github.com/netoabel)
 Autor: Abel Neto
 
 ## Importando as collection `pokemons` e `restaurantes`
