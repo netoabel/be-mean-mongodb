@@ -1,5 +1,6 @@
 # MongoDb - Artigo sobre Autenticação no MongoDb
 **Autor:** Abel Neto
+
 **Data:** 1462832546308
 
 ## Autenticação versus Autorização
@@ -12,7 +13,7 @@ _Autorização_, por outro lado, é algo que acontece somente após uma _autenti
 
 Para criar um usuário no Mongo, utilizamos o método `db.createUser()`, que recebe como parâmetro obrigatório um documento contendo as informações do usuário, com a seguinte estrutura:
 
-```javascript
+```json
 { 
   user: "<nome do usuário>",
   pwd: "<senha em texto plano>",
@@ -36,13 +37,13 @@ No caso em que é armazenada uma string nesse array, esta representa o nome da r
 
 Já quando um documento é adicionado ao array, ele especifica o nome da regra e também a database onde ela terá efeito para o usuário criado, da seguinte forma:
 
-```javascript
+```json
 { role: "<regra>", db: "<database>" }
 ```
 
 No exemplo abaixo, temos um comando de criação de um usuário comum (sem roles):
 
-```javascript
+```json
 db.createUser(
 { 
   user : "netoabel",
@@ -59,7 +60,7 @@ O documento da penúltima linha é o segundo parâmetro, opcional, que o método
 
 Para criar um usuário com permissões de administrador em todas as databases, basta criá-lo com a regra `userAdminAnyDatabase` na database `admin`:
 
-```
+```json
 db.createUser({
   user: "netoabel",
   pwd: "senha123",
