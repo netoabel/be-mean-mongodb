@@ -15,11 +15,12 @@ Para criar um usuário no Mongo, utilizamos o método `db.createUser()`, que rec
 
 ```json
 { 
-  user: "<nome do usuário>",
-  pwd: "<senha em texto plano>",
-  customData: { <qualquer informação> },
-  roles: [
-    { role: "<regra>", db: "<database>" } | "<regra>"
+  "user": "<nome do usuário>",
+  "pwd": "<senha em texto plano>",
+  "customData": {} ,
+  "roles": [
+    { "role": "<regra>", db: "<database>" },
+    "<regra>"
   ]
 }
 ```
@@ -38,7 +39,7 @@ No caso em que é armazenada uma string nesse array, esta representa o nome da r
 Já quando um documento é adicionado ao array, ele especifica o nome da regra e também a database onde ela terá efeito para o usuário criado, da seguinte forma:
 
 ```json
-{ role: "<regra>", db: "<database>" }
+{ "role": "<regra>", db: "<database>" }
 ```
 
 No exemplo abaixo, temos um comando de criação de um usuário comum (sem roles):
@@ -46,11 +47,11 @@ No exemplo abaixo, temos um comando de criação de um usuário comum (sem roles
 ```json
 db.createUser(
 { 
-  user : "netoabel",
-  pwd: "senha123",
-  customData : { twitter: "@_netoabel" }
+  "user" : "netoabel",
+  "pwd": "senha123",
+  "customData" : { "twitter": "@_netoabel" }
 }, 
-{ w: "majority" , wtimeout: 5000 }
+{ "w": "majority" , "wtimeout": 5000 }
 )
 ```
 
@@ -62,9 +63,9 @@ Para criar um usuário com permissões de administrador em todas as databases, b
 
 ```json
 db.createUser({
-  user: "netoabel",
-  pwd: "senha123",
-  roles: [{ role: "userAdminAnyDatabase", db: "admin" }]
+  "user": "netoabel",
+  "pwd": "senha123",
+  "roles": [{ role: "userAdminAnyDatabase", db: "admin" }]
 })
 ```
 
