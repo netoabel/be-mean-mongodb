@@ -13,14 +13,13 @@ _Autorização_, por outro lado, é algo que acontece somente após uma _autenti
 
 Para criar um usuário no Mongo, utilizamos o método `db.createUser()`, que recebe como parâmetro obrigatório um documento contendo as informações do usuário, com a seguinte estrutura:
 
-```json
+```javascript
 { 
-  "user": "<nome do usuário>",
-  "pwd": "<senha em texto plano>",
-  "customData": {} ,
-  "roles": [
-    { "role": "<regra>", db: "<database>" },
-    "<regra>"
+  user: "<nome do usuário>",
+  pwd: "<senha em texto plano>",
+  customData: { <qualquer informação> },
+  roles: [
+    { role: "<regra>", db: "<database>" } | "<regra>"
   ]
 }
 ```
@@ -38,20 +37,20 @@ No caso em que é armazenada uma string nesse array, esta representa o nome da r
 
 Já quando um documento é adicionado ao array, ele especifica o nome da regra e também a database onde ela terá efeito para o usuário criado, da seguinte forma:
 
-```json
-{ "role": "<regra>", db: "<database>" }
+```javascript
+{ role: "<regra>", db: "<database>" }
 ```
 
 No exemplo abaixo, temos um comando de criação de um usuário comum (sem roles):
 
-```json
+```javascript
 db.createUser(
 { 
-  "user" : "netoabel",
-  "pwd": "senha123",
-  "customData" : { "twitter": "@_netoabel" }
+  user : "netoabel",
+  pwd: "senha123",
+  customData : { twitter: "@_netoabel" }
 }, 
-{ "w": "majority" , "wtimeout": 5000 }
+{ w: "majority" , wtimeout: 5000 }
 )
 ```
 
@@ -61,11 +60,11 @@ O documento da penúltima linha é o segundo parâmetro, opcional, que o método
 
 Para criar um usuário com permissões de administrador em todas as databases, basta criá-lo com a regra `userAdminAnyDatabase` na database `admin`:
 
-```json
+```javascript
 db.createUser({
-  "user": "netoabel",
-  "pwd": "senha123",
-  "roles": [{ role: "userAdminAnyDatabase", db: "admin" }]
+  user: "netoabel",
+  pwd: "senha123",
+  roles: [{ role: "userAdminAnyDatabase", db: "admin" }]
 })
 ```
 
