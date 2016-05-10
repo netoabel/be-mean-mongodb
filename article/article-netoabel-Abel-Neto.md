@@ -19,7 +19,7 @@ Para criar um usuário no Mongo, utilizamos o método `db.createUser()`, que rec
   pwd: "<senha em texto plano>",
   customData: { <qualquer informação> },
   roles: [
-    { role: "<regra>", db: "<database>" } | "<regra>"
+    { role: "<nome da permissão>", db: "<database>" } | "<papel>"
   ]
 }
 ```
@@ -29,16 +29,16 @@ Onde:
     user        - Nome do usuário;
     pwd         - Senha;
     customData  - Propriedade opcional que recebe um documento e pode ser usada para armazenar dados adicionais de qualquer tipo;
-    roles       - As regras de permissões do usuário. 
+    roles       - As permissões do usuário. 
 
 A propriedade `roles` deve receber um array, que pode ter, em cada posição, uma string ou um documento. 
 
-No caso em que é armazenada uma string nesse array, esta representa o nome da regra, que terá efeito sobre o novo usuário somente na database selecionada no momento da sua criação. 
+No caso em que é armazenada uma string nesse array, esta representa o nome da permissão, que terá efeito sobre o novo usuário somente na database selecionada no momento da sua criação. 
 
-Já quando um documento é adicionado ao array, ele especifica o nome da regra e também a database onde ela terá efeito para o usuário criado, da seguinte forma:
+Já quando um documento é adicionado ao array, ele especifica o nome da permissão e também a database onde ela terá efeito para o usuário criado, da seguinte forma:
 
 ```javascript
-{ role: "<regra>", db: "<database>" }
+{ role: "<nome da permissão>", db: "<database>" }
 ```
 
 No exemplo abaixo, temos um comando de criação de um usuário comum (sem roles):
@@ -58,7 +58,7 @@ O documento da penúltima linha é o segundo parâmetro, opcional, que o método
 
 ## Como criar um usuário administrador
 
-Para criar um usuário com permissões de administrador em todas as databases, basta criá-lo com a regra `userAdminAnyDatabase` na database `admin`:
+Para criar um usuário com permissões de administrador em todas as databases, basta criá-lo com a permissão `userAdminAnyDatabase` na database `admin`:
 
 ```javascript
 db.createUser({
@@ -68,15 +68,15 @@ db.createUser({
 })
 ```
 
-## Regras de administração de cluster
+## Permissões de administração de cluster
 
 Usuários com permissões de administração de cluster são capazes de administrar várias instâncias do MongoDB organizadas em cluster, em vez de somente databases específicas em um servidor. 
 
 #### clusterAdmin
-Nível mais alto de gerenciamento de cluster. É equivalente a uma combinação das regras `clusterManager`, `clusterMonitor` e `hostManager`, além de também conceder permissão para a ação `dropDatabase`.
+Nível mais alto de gerenciamento de cluster. É equivalente a uma combinação das permissões `clusterManager`, `clusterMonitor` e `hostManager`, além de também conceder permissão para a ação `dropDatabase`.
 
 #### clusterManager
-Autoriza ações de monitoramento e gerenciamento no cluster. Um usuário com essa regra pode acessar as databases `config` e `local`, que são usadas em sharding e replicação, respectivamente.
+Autoriza ações de monitoramento e gerenciamento no cluster. Um usuário com essa permissão pode acessar as databases `config` e `local`, que são usadas em sharding e replicação, respectivamente.
 
 Provê acesso às seguintes ações no cluster como um todo:
 
