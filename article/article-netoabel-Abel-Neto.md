@@ -19,7 +19,7 @@ Para criar um usuário no Mongo, utilizamos o método `db.createUser()`, que rec
   pwd: "<senha em texto plano>",
   customData: { <qualquer informação> },
   roles: [
-    { role: "<nome da permissão>", db: "<database>" } | "<papel>"
+    { role: "<nome da permissão>", db: "<database>" } | "<nome da permissão>"
   ]
 }
 ```
@@ -464,3 +464,5 @@ Permite qualquer ação em um recurso. Não atribua esta ação, exceto para cir
 
 #### internal
 Permite ações internas. Não atribua esta ação, exceto para circunstâncias excepcionais.
+
+__Referência__: [Documentação oficial do MongoDB](https://docs.mongodb.com/v2.6/reference/).
