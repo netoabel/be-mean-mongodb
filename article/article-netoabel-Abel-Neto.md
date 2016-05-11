@@ -189,7 +189,7 @@ Disponibiliza as seguintes ações em todas as databases do cluster:
 
 Ações de privilégio definem as operações que um usuário pode realizar em um recurso. Um priviégio compreende um recurso e as ações permitidas. Veja a seguir uma lista das ações de privilégio disponíveis:
 
-### Ações de consulta e escrita
+## Ações de consulta e escrita
 
 #### find
 O usuário pode utilizar o método `db.collection.find()`. Aplicável a databases ou collections.
@@ -206,7 +206,7 @@ O usuário pode utilizar o comando `update`. Aplicável a databases ou collectio
 #### bypassDocumentValidation
 O usuário pode bypassar a validação de documentos para comandos que suportam a opção `bypassDocumentValidation`. Aplicável a databases ou collections.
 
-### Ações de gerenciamento de databases
+## Ações de gerenciamento de databases
 
 #### changeCustomData
 O usuário pode alterar informações customizadas de qualquer usuário na database especificada. Aplicável a databases.
@@ -265,7 +265,7 @@ O usuário pode visualizar informações a respeito de qualquer permissão na da
 #### viewUser
 O usuário pode visualizar as informações de qualquer usuário na database especificada. Aplicável a databases.
 
-### Deployment Management Actions
+## Ações de gerenciamento de deploy
 
 #### authSchemaUpgrade
 O usuário pode utilizar o comando `authSchemaUpgrade`. Aplicável ao cluster.
@@ -294,7 +294,7 @@ O usuário pode utilizar o comando `planCacheClear` e os métodos `PlanCache.cle
 #### storageDetails
 O usuário pode utilizar o comando `storageDetails`. Aplicável a databases ou collections.
 
-### Replication Actions
+## Ações de replicação
 
 #### appendOplogNote
 O usuário pode adicionar anotações ao oplog. Aplicável ao cluster.
@@ -314,7 +314,7 @@ O usuário pode modificar o estado de um replica set através dos comandos `repl
 #### resync
 O usuário pode utilizar o comando `resync`. Aplicável ao cluster.
 
-### Sharding Actions
+## Ações de sharding
 
 #### addShard
 O usuário pode utilizar o comando `addShard`. Aplicável ao cluster.
@@ -349,7 +349,7 @@ O usuário pode utilizar o comando `splitChunk`. Aplicável a databases ou colle
 #### splitVector
 O usuário pode utilizar o comando `splitVector`. Aplicável a databases ou collections.
 
-### Server Administration Actions
+## Ações de administração de servidores
 
 #### applicationMessage
 O usuário pode utilizar o comando `logApplicationMessage`. Aplicável ao cluster.
@@ -407,7 +407,7 @@ O usuário pode utilizar o comando `shutdown`. Aplicável ao cluster.
 #### touch
 O usuário pode utilizar o comando `touch`. Aplicável ao cluster.
 
-### Diagnostic Actions
+## Ações de diagnóstico
 
 #### collStats
 O usuário pode utilizar o comando `collStats`. Aplicável a databases ou collections.
@@ -457,7 +457,7 @@ O usuário pode utilizar o comando `validate`. Aplicável a databases ou collect
 #### top
 O usuário pode utilizar o comando `top`. Aplicável ao cluster.
 
-### Ações internas
+## Ações internas
 
 #### anyAction
 Permite qualquer ação em um recurso. Não atribua esta ação, exceto para circunstâncias excepcionais.
