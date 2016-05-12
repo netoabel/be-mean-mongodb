@@ -8,7 +8,7 @@
 
 MongoDB é um banco de dados NoSQL, o que significa que ele não segue a implementação mais tradicional e conhecida de bancos de dados em geral, a relacional. Isso pode ser bom ou ruim, a depender do cenário onde ele for utilizado. 
 
-Um caso onde eu o utilizaria (e de fato utilizo) é o meu TCC, que é um projeto de automação residencial, onde eu armazeno informações sobre atualizações de estado dos dispositivos em uma base de dados. Como pode haver um alto volume de dados e operações de escrita e não há a necessidade de garantir transações atômicas ou alta confiabilidade, por exemplo, o MongoDB se mostrou a melhor alternativa para o caso. 
+Um caso onde eu o utilizaria (e de fato utilizo) é o meu TCC, que é um projeto de automação residencial, onde eu armazeno informações sobre atualizações de estado dos dispositivos em uma base de dados. Como pode haver um alto volume de dados e operações de escrita e não há a necessidade de garantir transações atômicas, por exemplo, o MongoDB se mostrou a melhor alternativa para o caso. 
 
 Além disso, diferentes dispositivos possuem diferentes modelagens no banco. Modelar esse tipo de estrutura é muito mais fácil no MongoDB. Incluir novas estruturas e tipos de dispositivos não é um problema, por exemplo.
 
@@ -20,7 +20,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 
 ### Collection users
 
-```javascript
+```js
 {
     name,
     bio,
@@ -44,7 +44,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 
 ### Collection projects
 
-```javascript
+```js
 {
     name,
     description,
@@ -86,7 +86,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 
 ## Collection activites
 
-```javascript
+```js
 { 
     name,
     description,
@@ -135,7 +135,7 @@ No caso dos comentários, como é muito pouco provável que a quantidade de come
 
 ## Inserindo usuários
 
-```javascript
+```js
 be-mean-project> var users = [];
 be-mean-project> 
 ... for (var i = 0; i < 10; i++) {
@@ -179,7 +179,7 @@ BulkWriteResult({
 
 Primeiro, criaremos as atividades que serão atribuídas aos projetos:
 
-```javascript
+```js
 be-mean-project> var activity = { 
 ...     name: "Activity 1",
 ...     description: "Description",
@@ -229,14 +229,14 @@ WriteResult({
 
 Seguindo o mesmo processo, foram inseridas 8 atividades:
 
-```javascript
+```js
 be-mean-project> db.activities.count()
 8
 ```
 
 Agora, inserimos os projetos:
 
-```javascript
+```js
 be-mean-project> var project = {
 ...     name: "Project 1",
 ...     description: "Description",
@@ -554,7 +554,510 @@ WriteResult({
 })
 ```
 
-## Retrieve - busca
+## Listando dados dos membros de um projeto
+
+```js
+be-mean-project> var members = [];
+be-mean-project> var getMemberData = function (member) {
+...     var memberData = db.users.findOne({ _id: member.user_id });
+...     memberData.member_type = member.member_type;
+...     memberData.notify = member.notify;
+...     members.push(memberData);
+... };
+be-mean-project> var project = db.projects.findOne({ name: /project 1/i }, { members: 1 });
+be-mean-project> project.members.forEach(getMemberData);
+be-mean-project> members
+[
+  {
+    "_id": ObjectId("5734c206a551a48f44c48321"),
+    "name": "User 0",
+    "bio": "Once upon a time...",
+    "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+    "auth": {
+      "username": "user_0",
+      "email": "user_0@gmail.com",
+      "password": "password",
+      "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+      "online": true,
+      "disabled": false,
+      "hash_token": "572f78aed7193a654cecb74b"
+    },
+    "settings": {
+      "system": {
+        "background_path": "images/user_0_bg.png"
+      }
+    },
+    "member_type": "type 1",
+    "notify": true
+  },
+  {
+    "_id": ObjectId("5734c206a551a48f44c48322"),
+    "name": "User 1",
+    "bio": "Once upon a time...",
+    "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+    "auth": {
+      "username": "user_1",
+      "email": "user_1@gmail.com",
+      "password": "password",
+      "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+      "online": true,
+      "disabled": false,
+      "hash_token": "572f78aed7193a654cecb74b"
+    },
+    "settings": {
+      "system": {
+        "background_path": "images/user_1_bg.png"
+      }
+    },
+    "member_type": "type 1",
+    "notify": true
+  },
+  {
+    "_id": ObjectId("5734c206a551a48f44c48323"),
+    "name": "User 2",
+    "bio": "Once upon a time...",
+    "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+    "auth": {
+      "username": "user_2",
+      "email": "user_2@gmail.com",
+      "password": "password",
+      "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+      "online": true,
+      "disabled": false,
+      "hash_token": "572f78aed7193a654cecb74b"
+    },
+    "settings": {
+      "system": {
+        "background_path": "images/user_2_bg.png"
+      }
+    },
+    "member_type": "type 1",
+    "notify": true
+  },
+  {
+    "_id": ObjectId("5734c206a551a48f44c48324"),
+    "name": "User 3",
+    "bio": "Once upon a time...",
+    "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+    "auth": {
+      "username": "user_3",
+      "email": "user_3@gmail.com",
+      "password": "password",
+      "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+      "online": true,
+      "disabled": false,
+      "hash_token": "572f78aed7193a654cecb74b"
+    },
+    "settings": {
+      "system": {
+        "background_path": "images/user_3_bg.png"
+      }
+    },
+    "member_type": "type 1",
+    "notify": true
+  },
+  {
+    "_id": ObjectId("5734c206a551a48f44c48325"),
+    "name": "User 4",
+    "bio": "Once upon a time...",
+    "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+    "auth": {
+      "username": "user_4",
+      "email": "user_4@gmail.com",
+      "password": "password",
+      "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+      "online": true,
+      "disabled": false,
+      "hash_token": "572f78aed7193a654cecb74b"
+    },
+    "settings": {
+      "system": {
+        "background_path": "images/user_4_bg.png"
+      }
+    },
+    "member_type": "type 1",
+    "notify": true
+  }
+]
+```
+
+## Listando projetos com uma tag específica
+
+```js
+be-mean-project> db.projects.find({ tags: 'tag3' }); 
+{
+  "_id": ObjectId("5734d997a551a48f44c48334"),
+  "name": "Project 1",
+  "description": "Description",
+  "date_begin": ISODate("2016-05-12T19:29:27.728Z"),
+  "date_dream": ISODate("2016-05-12T19:29:27.728Z"),
+  "date_end": ISODate("2016-05-12T19:29:27.728Z"),
+  "realocate": ISODate("2016-05-12T19:29:27.728Z"),
+  "visible": true,
+  "expired": false,
+  "visualizable_mod": true,
+  "members": [
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48321"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48322"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48323"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48324"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48325"),
+      "member_type": "type 1",
+      "notify": true
+    }
+  ],
+  "tags": [
+    "tag1",
+    "tag2",
+    "tag3"
+  ],
+  "goals": [
+    {
+      "name": "Goal",
+      "description": "Description",
+      "date_begin": ISODate("2016-05-12T19:29:27.728Z"),
+      "date_dream": ISODate("2016-05-12T19:29:27.728Z"),
+      "date_end": ISODate("2016-05-12T19:29:27.728Z"),
+      "realocate": ISODate("2016-05-12T19:29:27.728Z"),
+      "expired": false,
+      "tags": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ],
+      "historic": [
+        {
+          "date_realocate": ISODate("2016-05-12T19:29:27.728Z")
+        }
+      ],
+      "activities": [
+        {
+          "activity_id": ObjectId("5734d192a551a48f44c4832b")
+        },
+        {
+          "activity_id": ObjectId("5734d287a551a48f44c4832d")
+        }
+      ]
+    }
+  ]
+}
+{
+  "_id": ObjectId("5734da0ea551a48f44c48335"),
+  "name": "Project 2",
+  "description": "Description",
+  "date_begin": ISODate("2016-05-12T19:31:26.721Z"),
+  "date_dream": ISODate("2016-05-12T19:31:26.721Z"),
+  "date_end": ISODate("2016-05-12T19:31:26.721Z"),
+  "realocate": ISODate("2016-05-12T19:31:26.721Z"),
+  "visible": true,
+  "expired": false,
+  "visualizable_mod": true,
+  "members": [
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48322"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48323"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48324"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48325"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48326"),
+      "member_type": "type 1",
+      "notify": true
+    }
+  ],
+  "tags": [
+    "tag2",
+    "tag3",
+    "tag4"
+  ],
+  "goals": [
+    {
+      "name": "Goal",
+      "description": "Description",
+      "date_begin": ISODate("2016-05-12T19:31:26.721Z"),
+      "date_dream": ISODate("2016-05-12T19:31:26.721Z"),
+      "date_end": ISODate("2016-05-12T19:31:26.721Z"),
+      "realocate": ISODate("2016-05-12T19:31:26.721Z"),
+      "expired": false,
+      "tags": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ],
+      "historic": [
+        {
+          "date_realocate": ISODate("2016-05-12T19:31:26.721Z")
+        }
+      ],
+      "activities": [
+        {
+          "activity_id": ObjectId("5734d2a0a551a48f44c4832e")
+        },
+        {
+          "activity_id": ObjectId("5734d2bda551a48f44c4832f")
+        }
+      ]
+    }
+  ]
+}
+{
+  "_id": ObjectId("5734da8ca551a48f44c48336"),
+  "name": "Project 3",
+  "description": "Description",
+  "date_begin": ISODate("2016-05-12T19:33:32.624Z"),
+  "date_dream": ISODate("2016-05-12T19:33:32.624Z"),
+  "date_end": ISODate("2016-05-12T19:33:32.624Z"),
+  "realocate": ISODate("2016-05-12T19:33:32.624Z"),
+  "visible": true,
+  "expired": false,
+  "visualizable_mod": true,
+  "members": [
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48323"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48324"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48325"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48326"),
+      "member_type": "type 1",
+      "notify": true
+    },
+    {
+      "user_id": ObjectId("5734c206a551a48f44c48327"),
+      "member_type": "type 1",
+      "notify": true
+    }
+  ],
+  "tags": [
+    "tag3",
+    "tag4",
+    "tag5"
+  ],
+  "goals": [
+    {
+      "name": "Goal",
+      "description": "Description",
+      "date_begin": ISODate("2016-05-12T19:33:32.624Z"),
+      "date_dream": ISODate("2016-05-12T19:33:32.624Z"),
+      "date_end": ISODate("2016-05-12T19:33:32.624Z"),
+      "realocate": ISODate("2016-05-12T19:33:32.624Z"),
+      "expired": false,
+      "tags": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ],
+      "historic": [
+        {
+          "date_realocate": ISODate("2016-05-12T19:33:32.624Z")
+        }
+      ],
+      "activities": [
+        {
+          "activity_id": ObjectId("5734d2daa551a48f44c48330")
+        },
+        {
+          "activity_id": ObjectId("5734d2ffa551a48f44c48331")
+        }
+      ]
+    }
+  ]
+}
+Fetched 3 record(s) in 7ms
+```
+
+## Listando apenas os nomes de todas as atividades
+
+```js
+be-mean-project> db.activities.find({}, { _id: 0, name: 1 })
+{
+  "name": "Activity 1"
+}
+{
+  "name": "Activity 2"
+}
+{
+  "name": "Activity 3"
+}
+{
+  "name": "Activity 4"
+}
+{
+  "name": "Activity 5"
+}
+{
+  "name": "Activity 6"
+}
+{
+  "name": "Activity 7"
+}
+{
+  "name": "Activity 8"
+}
+Fetched 8 record(s) in 3ms
+```
+
+## Listando todos os projetos sem tags
+
+```js
+be-mean-project> db.projects.find({ tags: { $exists: false } })
+Fetched 0 record(s) in 1ms
+```
+
+p.s.: a query não retorna nada porque não temos nenhum projeto sem tags. :P
+
+## Listando todos os usuários que não fazem parte do primeiro projeto
+
+```js
+be-mean-project> var projectMembers = [];
+be-mean-project> var project = db.projects.findOne({}, { members: 1 });
+be-mean-project> project.members.forEach(function(member) {
+...     projectMembers.push(member.user_id);
+... });
+be-mean-project> db.users.find({ _id: { $not: { $in: projectMembers } } });
+{
+  "_id": ObjectId("5734c206a551a48f44c48326"),
+  "name": "User 5",
+  "bio": "Once upon a time...",
+  "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+  "auth": {
+    "username": "user_5",
+    "email": "user_5@gmail.com",
+    "password": "password",
+    "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+    "online": true,
+    "disabled": false,
+    "hash_token": "572f78aed7193a654cecb74b"
+  },
+  "settings": {
+    "system": {
+      "background_path": "images/user_5_bg.png"
+    }
+  }
+}
+{
+  "_id": ObjectId("5734c206a551a48f44c48327"),
+  "name": "User 6",
+  "bio": "Once upon a time...",
+  "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+  "auth": {
+    "username": "user_6",
+    "email": "user_6@gmail.com",
+    "password": "password",
+    "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+    "online": true,
+    "disabled": false,
+    "hash_token": "572f78aed7193a654cecb74b"
+  },
+  "settings": {
+    "system": {
+      "background_path": "images/user_6_bg.png"
+    }
+  }
+}
+{
+  "_id": ObjectId("5734c206a551a48f44c48328"),
+  "name": "User 7",
+  "bio": "Once upon a time...",
+  "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+  "auth": {
+    "username": "user_7",
+    "email": "user_7@gmail.com",
+    "password": "password",
+    "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+    "online": true,
+    "disabled": false,
+    "hash_token": "572f78aed7193a654cecb74b"
+  },
+  "settings": {
+    "system": {
+      "background_path": "images/user_7_bg.png"
+    }
+  }
+}
+{
+  "_id": ObjectId("5734c206a551a48f44c48329"),
+  "name": "User 8",
+  "bio": "Once upon a time...",
+  "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+  "auth": {
+    "username": "user_8",
+    "email": "user_8@gmail.com",
+    "password": "password",
+    "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+    "online": true,
+    "disabled": false,
+    "hash_token": "572f78aed7193a654cecb74b"
+  },
+  "settings": {
+    "system": {
+      "background_path": "images/user_8_bg.png"
+    }
+  }
+}
+{
+  "_id": ObjectId("5734c206a551a48f44c4832a"),
+  "name": "User 9",
+  "bio": "Once upon a time...",
+  "register_date": ISODate("2016-05-12T17:48:42.462Z"),
+  "auth": {
+    "username": "user_9",
+    "email": "user_9@gmail.com",
+    "password": "password",
+    "last_access": ISODate("2016-05-12T17:48:42.462Z"),
+    "online": true,
+    "disabled": false,
+    "hash_token": "572f78aed7193a654cecb74b"
+  },
+  "settings": {
+    "system": {
+      "background_path": "images/user_9_bg.png"
+    }
+  }
+}
+Fetched 5 record(s) in 6ms
+```
 
 ## Update - alteração
 
