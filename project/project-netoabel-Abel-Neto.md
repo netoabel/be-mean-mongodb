@@ -179,7 +179,7 @@ BulkWriteResult({
 
 Primeiro, criaremos as atividades que serão atribuídas aos projetos:
 
-```
+```javascript
 be-mean-project> var activity = { 
 ...     name: "Activity 1",
 ...     description: "Description",
@@ -229,14 +229,14 @@ WriteResult({
 
 Seguindo o mesmo processo, foram inseridas 8 atividades:
 
-```
+```javascript
 be-mean-project> db.activities.count()
 8
 ```
 
 Agora, inserimos os projetos:
 
-```
+```javascript
 be-mean-project> var project = {
 ...     name: "Project 1",
 ...     description: "Description",
