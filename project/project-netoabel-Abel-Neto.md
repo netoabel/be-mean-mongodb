@@ -18,7 +18,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 
 ![](https://raw.githubusercontent.com/netoabel/be-mean-instagram-mongodb-projects/master/modeling/relational.jpg)
 
-### Collection `users`
+### Collection users
 
 ```javascript
 {
@@ -48,7 +48,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 }
 ```
 
-### Collection `projects`
+### Collection projects
 
 ```javascript
 {
@@ -76,7 +76,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 ```
 
 
-## Collection `goals`
+## Collection goals
 
 ```javascript
 {
@@ -93,45 +93,61 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
         { date_realocate }
     ],
     activities: [
+        { activity_id }
+    ]
+}
+```
+
+## Collection activites
+
+```javascript
+{ 
+    name,
+    description,
+    date_begin,
+    date_dream,
+    date_end,
+    realocate,
+    expired,
+    tags: [],
+    historic: [
+        { date_realocate }
+    ], 
+    members: [
         { 
-            name,
-            description,
-            date_begin,
-            date_dream,
-            date_end,
-            realocate,
-            expired,
-            tags: [],
-            historic: [
-                { date_realocate }
-            ], 
+            user_id,
+            member_type,
+            notify
+        }
+    ],
+    comments: [
+        {
+            text,
+            date,
+            files: [
+                { path, weight, name }
+            ],
             members: [
                 { 
                     user_id,
-                    member_type,
-                    notify
-                }
-            ],
-            comments: [
-                { 
-                    text,
-                    date,
-                    files: [
-                        { path, weight, name }
-                    ],
-                    members: [
-                        { 
-                            user_id,
-                            member_type, 
-                            notify 
-                        }
-                    ]
+                    member_type, 
+                    notify 
                 }
             ]
         }
     ]
 }
 ```
+
+## Algumas considerações
+
+Poderíamos ter criado apenas uma collection `projects` com todos os documentos de `goals` e `activities` dentro dela, como arrays. Porém, o MongoDB estabelece um limite de 16MB por documento armazenado. No nosso cenário, a probabilidade de a quantidade de atividades crescer consideravelmente é muito grande. Isso poderia facilmente levar um documento da collection `projects` a exceder o limite de tamanho estabelecido pelo Mongo.
+
+Ao criar uma collection `activities` separada, fazemos com que cada atividade seja armazenada como um novo documento. Além de evitar a extrapolação do limite, esse formato evita que um único documento use uma quantidade excessiva de memória RAM ou consuma uma largura de banda muito grande durante uma transmissão.
+
+No caso dos comentários, como é muito pouco provável que a quantidade de comentários em uma única atividade cresça a ponto de fazer com que um documento da collection `activities` se torne muito grande, optamos por mantê-los em um array interno a essa collection, a fim de tornar o acesso a eles mais fácil e performático.
+
+Como as atividades estão relacionadas não a projetos mas a metas, consideramos aqui adequado criar uma collection `goals` cujos documentos possam ser referenciados diretamente dos documentos da collection `activities` utilizando os mecanismos de identificação única do próprio MongoDB.
 
 ## Create - cadastro
 
