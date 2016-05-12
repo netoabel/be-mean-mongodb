@@ -32,13 +32,13 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
         last_access,
         online,
         disabled,
-        hash_token,
-    }
+        hash_token
+    },
     settings: { 
         system: {
             background_path
         }
-    }
+    },
     projects: [
         { 
             project_id , 
