@@ -104,6 +104,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 { 
     name,
     description,
+    goal_id,
     date_begin,
     date_dream,
     date_end,
