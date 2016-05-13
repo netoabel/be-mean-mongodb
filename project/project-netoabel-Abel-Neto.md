@@ -4,7 +4,12 @@
 
 **Data:** 1462977026837
 
-## Caso de uso onde seria interessante utilizar o MongoDB
+## Índice
+
+1. [Caso de uso onde seria interessante utilizar o MongoDB](#when)
+2. 
+
+## <a name="when"></a>Caso de uso onde seria interessante utilizar o MongoDB
 
 MongoDB é um banco de dados NoSQL, o que significa que ele não segue a implementação mais tradicional e conhecida de bancos de dados em geral, a relacional. Isso pode ser bom ou ruim, a depender do cenário onde ele for utilizado. 
 
