@@ -945,7 +945,7 @@ be-mean-project> db.projects.find({ tags: { $exists: false } })
 Fetched 0 record(s) in 1ms
 ```
 
-p.s.: a query não retorna nada porque não temos nenhum projeto sem tags. :P
+P.s.: a query não retorna nada porque não temos nenhum projeto sem tags. :P
 
 ## Listando todos os usuários que não fazem parte do primeiro projeto
 
@@ -1059,7 +1059,277 @@ be-mean-project> db.users.find({ _id: { $not: { $in: projectMembers } } });
 Fetched 5 record(s) in 6ms
 ```
 
-## Update - alteração
+## Adicionando o campo views com valor 0 em todos os projetos
+
+```js
+be-mean-project> var query = {}
+be-mean-project> var modifier = { $set: { views: 0 } }
+be-mean-project> var options = { multi: true }
+be-mean-project> db.projects.update(query, modifier, options)
+Updated 5 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 5,
+  "nUpserted": 0,
+  "nModified": 5
+})
+```
+
+## Adicionando uma tag nova a cada projeto
+
+```js
+be-mean-project> var query = { name: /project 1/i }
+be-mean-project> var modifier = { $push: { tags:  'tag10' } }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 24ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 2/i }
+be-mean-project> var modifier = { $push: { tags:  'tag11' } }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 3/i }
+be-mean-project> var modifier = { $push: { tags:  'tag12' } }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 4ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 4/i }
+be-mean-project> var modifier = { $push: { tags:  'tag13' } }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 5/i }
+be-mean-project> var modifier = { $push: { tags:  'tag14' } }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+```
+
+## Adicionando 2 novos mebros para cada projeto
+
+```js
+be-mean-project> var modifier = { 
+...     $push: { 
+...         members:  {
+...             $each: [{
+...                 user_id: ObjectId("5734c206a551a48f44c48326"),
+...                 member_type: "type 1",
+...                 notify: true
+...             },{
+...                 user_id: ObjectId("5734c206a551a48f44c48327"),
+...                 member_type: "type 1",
+...                 notify: true
+...             }]  
+...         } 
+...     } 
+... }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 2/i }
+be-mean-project> var modifier = { 
+...     $push: { 
+...         members:  {
+...             $each: [{
+...                 user_id: ObjectId("5734c206a551a48f44c48327"),
+...                 member_type: "type 1",
+...                 notify: true
+...             },{
+...                 user_id: ObjectId("5734c206a551a48f44c48328"),
+...                 member_type: "type 1",
+...                 notify: true
+...             }]  
+...         } 
+...     } 
+... }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 3/i }
+be-mean-project> var modifier = { 
+...     $push: { 
+...         members:  {
+...             $each: [{
+...                 user_id: ObjectId("5734c206a551a48f44c48328"),
+...                 member_type: "type 1",
+...                 notify: true
+...             },{
+...                 user_id: ObjectId("5734c206a551a48f44c48329"),
+...                 member_type: "type 1",
+...                 notify: true
+...             }]  
+...         } 
+...     } 
+... }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 1ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 4/i }
+be-mean-project> var modifier = { 
+...     $push: { 
+...         members:  {
+...             $each: [{
+...                 user_id: ObjectId("5734c206a551a48f44c48329"),
+...                 member_type: "type 1",
+...                 notify: true
+...             },{
+...                 user_id: ObjectId("5734c206a551a48f44c4832a"),
+...                 member_type: "type 1",
+...                 notify: true
+...             }]  
+...         } 
+...     } 
+... }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 3ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+
+be-mean-project> var query = { name: /project 5/i }
+be-mean-project> var modifier = { 
+...     $push: { 
+...         members:  {
+...             $each: [{
+...                 user_id: ObjectId("5734c206a551a48f44c4832a"),
+...                 member_type: "type 1",
+...                 notify: true
+...             },{
+...                 user_id: ObjectId("5734c206a551a48f44c48321"),
+...                 member_type: "type 1",
+...                 notify: true
+...             }]  
+...         } 
+...     } 
+... }
+be-mean-project> db.projects.update(query, modifier)
+Updated 1 existing record(s) in 5ms
+WriteResult({
+  "nMatched": 1,
+  "nUpserted": 0,
+  "nModified": 1
+})
+```
+
+## Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8)
+
+```js
+be-mean-project> var query = { 
+...     name: {
+...         $not: {
+...             $in: [/activity 7/i, /activity 8/i]
+...         }
+...     }
+... }
+be-mean-project> var modifier = { 
+...     $push: { 
+...         comments:  {
+...                 text: "New comment",
+...                 date: new Date()
+...         }
+...     } 
+... }
+be-mean-project> var options = {
+...     multi: true
+... }
+be-mean-project> db.activities.update(query, modifier, options)
+Updated 6 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 6,
+  "nUpserted": 0,
+  "nModified": 6
+})
+```
+
+## Adicionando um projeto com upsert
+
+```js
+be-mean-project> var query = { name: /project 6/i };
+be-mean-project> var project = {
+...     name: "Project 6",
+...     description: "Description",
+...     date_begin: new Date(),
+...     date_dream: new Date(),
+...     date_end: new Date(),
+...     realocate: new Date(),
+...     visible: true,
+...     expired: false,
+...     visualizable_mod: true,
+...     members: [
+...          { 
+...             user_id: ObjectId("5734c206a551a48f44c48321"),
+...             member_type: "type 1",
+...             notify: true
+...         }
+...     ],
+...     tags: ['tag1', 'tag2', 'tag3'],
+...     goals: [
+...         {
+...             name: "Goal",
+...             description: "Description",
+...             date_begin: new Date(),
+...             date_dream: new Date(),
+...             date_end: new Date(),
+...             realocate: new Date(),
+...             expired: false,
+...             tags: ['tag1', 'tag2', 'tag3'],
+...             historic: [
+...                 { date_realocate: new Date() }
+...             ]
+...         }
+...     ]
+... };
+be-mean-project> var modifier = { $setOnInsert: project };
+be-mean-project> var options = { upsert: true };
+be-mean-project> db.projects.update(query, modifier, options);
+Updated 1 new record(s) in 3ms
+WriteResult({
+  "nMatched": 0,
+  "nUpserted": 1,
+  "nModified": 0,
+  "_id": ObjectId("573521f5594ac7cbdb4beba9")
+})
+```
 
 ## Delete - remoção
 
