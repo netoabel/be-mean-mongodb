@@ -1410,9 +1410,11 @@ be-mean-project> db.activities.find(query).forEach(function(activity) {
 ... });
 be-mean-project> var projectsQuery = {
 ...   goals: {
-...     $elemMatch: {
-...       "activities.activity_id": {
-...         $all: activityIds
+...     $not: {
+...       $elemMatch: {
+...         "activities.activity_id": {
+...           $nin: activityIds
+...         }
 ...       }
 ...     }
 ...   }
@@ -1422,6 +1424,50 @@ Removed 1 record(s) in 19ms
 WriteResult({
   "nRemoved": 1
 })
+```
+
+## Removendo todos os projetos que não possuem atividades
+
+```js
+be-mean-project> var query = {
+...   goals: { $not: { $elemMatch: { activities: { $exists: true } } } }
+... };
+be-mean-project> db.projects.remove(query);
+Removed 1 record(s) in 17ms
+WriteResult({
+  "nRemoved": 1
+})
+```
+
+## Removendo todos os projetos dos quais dois usuários específicos fazem parte
+
+```js
+be-mean-project> var query = {
+...   members: {
+...     $elemMatch: {
+...       user_id: {
+...         $all: [
+...           ObjectId("5734c206a551a48f44c48324"),
+...           ObjectId("5734c206a551a48f44c48330")
+...         ]
+...       }
+...     }
+...   }
+... }
+be-mean-project> db.projects.remove(query);
+Removed 1 record(s) in 1ms
+WriteResult({
+  "nRemoved": 1
+})
+```
+
+## Removendo todos os projetos com uma tag específica em goals
+
+```js
+var query = {
+  goals: { $elemMatch: { tags: { $in: ["tag3"] } } }
+}
+db.projects.remove(query);
 ```
 
 ## Sharding
