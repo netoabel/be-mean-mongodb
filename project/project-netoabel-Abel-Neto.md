@@ -1587,7 +1587,7 @@ $ sudo mongod --replSet shard1_rs
 
 Aqui registramos a instância que já tinhamos, onde temos a database `be-mean-project` com a collection `activities` e as duas novas instâncias do Mongo:
 
-```js
+```
 $ mongo --port 27020
 MongoDB shell version: 3.2.6
 connecting to: 127.0.0.1:27020/test
@@ -1658,14 +1658,7 @@ bart:27017(mongod-3.2.6) test> rs.initiate()
 {
   "ok": 1
 }
-```
-
-```
-$ mongo --host localhost --port 27031
-MongoDB shell version: 3.2.6
-connecting to: localhost:27031/test
-Mongo-Hacker 0.0.13
-bart:27031(mongod-3.2.6) test> rs.initiate()
+bart:27017(mongod-3.2.6) test> rs.add("127.0.0.1:27031")
 {
   "ok": 1
 }
@@ -1680,14 +1673,7 @@ bart:27022(mongod-3.2.6) test> rs.initiate()
 {
   "ok": 1
 }
-```
-
-```
-$ mongo --host localhost --port 27032
-MongoDB shell version: 3.2.6
-connecting to: localhost:27032/test
-Mongo-Hacker 0.0.13
-bart:27032(mongod-3.2.6) test> rs.initiate()
+bart:27022(mongod-3.2.6) test> rs.add("127.0.0.1:27032")
 {
   "ok": 1
 }
@@ -1702,39 +1688,8 @@ bart:27023(mongod-3.2.6) test> rs.initiate()
 {
   "ok": 1
 }
-```
-
-```
-$ mongo --host localhost --port 27033
-MongoDB shell version: 3.2.6
-connecting to: localhost:27033/test
-Mongo-Hacker 0.0.13
-bart:27033(mongod-3.2.6) test> rs.initiate()
+bart:27023(mongod-3.2.6) test> rs.add("127.0.0.1:27033")
 {
   "ok": 1
 }
-```
-
-```
-$ mongo --host localhost --port 27017
-MongoDB shell version: 3.2.6
-connecting to: localhost:27017/test
-Mongo-Hacker 0.0.13
-bart:27017(mongod-3.2.6) test> rs.add("127.0.0.1:27031")
-```
-
-```
-$ mongo --host localhost --port 27022
-MongoDB shell version: 3.2.6
-connecting to: localhost:27022/test
-Mongo-Hacker 0.0.13
-bart:27022(mongod-3.2.6) test> rs.add("127.0.0.1:27032")
-```
-
-```
-$ mongo --host localhost --port 27023
-MongoDB shell version: 3.2.6
-connecting to: localhost:27023/test
-Mongo-Hacker 0.0.13
-bart:27023(mongod-3.2.6) test> rs.add("127.0.0.1:27033")
 ```
