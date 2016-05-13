@@ -6,8 +6,37 @@
 
 ## Índice
 
-1. [Caso de uso onde seria interessante utilizar o MongoDB](#when)
-2. 
+1.[Caso de uso onde seria interessante utilizar o MongoDB](# when)
+2.[Modelagem](# modeling)
+3.[Algumas considerações](# considerations)
+4.[Inserindo usuários](# inserting_users)
+5.[Inserindo projetos](# inserting_projects)
+6.[Listando dados dos membros de um projeto](# listing_members)
+7.[Listando projetos com uma tag específica](# listing_projects_by_tag)
+8.[Listando apenas os nomes de todas as atividades](# listing_activities_names)
+9.[Listando todos os projetos sem tags](# listing_projects_no_tags)
+10.[Listando todos os usuários que não fazem parte do primeiro projeto](# listing_users_not_first_project)
+11.[Adicionando o campo views com valor 0 em todos os projetos](# adding_view)
+12.[Adicionando uma tag nova a cada projeto](# adding_new_tag)
+13.[Adicionando 2 novos membros para cada projeto](# adding_2_members)
+14.[Adicionando 1 comentário em cada atividade(exceto nas atividades 7 e 8](# adding_comment)
+  15.[Adicionando um projeto com upsert](# adding_project_upsert)
+  16.[Removendo todos os projetos que não possuem tags](# removing_projects_no_tags)
+  17.[Removendo todos os projetos que não possuem comentários em suas atividades](# removing_projects_no_comments)
+  18.[Removendo todos os projetos que não possuem atividades](# removing_projects_no_activities)
+  19.[Removendo todos os projetos dos quais dois usuários específicos fazem parte](# removing_projects_specific_members)
+  20.[Removendo todos os projetos com uma tag específica em goals](# removing_projects_specific_tag)
+  21.[Criando um usuário com permisões de leitura apenas](# creating_user_read_only)
+  22.[Criando um usuário com permissões de escrita e leitura](# create_user_read_write)
+  23.[Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](# granting_useradmin)
+  24.[Removendo o papel userAdmin](# revoking_useradmin)
+  25.[Listando todos os usuários e seus papéis](# listing_all_users)
+  26.[Iniciando um config server](# starting_config_server)
+  27.[Iniciando um router](# starting_router)
+  28.[Iniciando os shards](# starting_shards)
+  29.[Registrando os shards](# registering_shards)
+  30.[Habilitando sharding para a collection activities na database be - bean - project](# enabling_sharding)
+  31.[Criando uma réplica para cada shard](# creating_replicaset)
 
 ## <a name="when"></a>Caso de uso onde seria interessante utilizar o MongoDB
 
@@ -17,7 +46,7 @@ Um caso onde eu o utilizaria (e de fato utilizo) é o meu TCC, que é um projeto
 
 Além disso, diferentes dispositivos possuem diferentes modelagens no banco. Modelar esse tipo de estrutura é muito mais fácil no MongoDB. Incluir novas estruturas e tipos de dispositivos não é um problema, por exemplo.
 
-## Modelagem
+## <a name="modeling"></a>Modelagem
 
 Vejamos como ficaria a modelagem relacional a seguir no MongoDB: 
 
@@ -130,7 +159,7 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
 }
 ```
 
-## Algumas considerações
+## <a name="considerations"></a>Algumas considerações
 
 Poderíamos ter criado apenas uma collection `projects` com todos os documentos de `activities` dentro dela, como arrays. Porém, o MongoDB estabelece um limite de 16MB por documento armazenado. No nosso cenário, a probabilidade de a quantidade de atividades crescer consideravelmente é muito grande. Isso poderia facilmente levar um documento da collection `projects` a exceder o limite de tamanho estabelecido pelo Mongo.
 
@@ -138,7 +167,7 @@ Ao criar uma collection `activities` separada, fazemos com que cada atividade se
 
 No caso dos comentários, como é muito pouco provável que a quantidade de comentários em uma única atividade cresça a ponto de fazer com que um documento da collection `activities` se torne muito grande, optamos por mantê-los em um array interno a essa collection, a fim de tornar o acesso a eles mais fácil e performático.
 
-## Inserindo usuários
+## <a name="inserting_users"></a>Inserindo usuários
 
 ```js
 be-mean-project> var users = [];
@@ -180,7 +209,7 @@ BulkWriteResult({
 })
 ```
 
-## Inserindo projetos
+## <a name="inserting_projects"></a>Inserindo projetos
 
 Primeiro, criaremos as atividades que serão atribuídas aos projetos:
 
@@ -613,7 +642,7 @@ WriteResult({
 })
 ```
 
-## Listando dados dos membros de um projeto
+## <a name="listing_members"></a>Listando dados dos membros de um projeto
 
 ```js
 be-mean-project> var members = [];
@@ -740,7 +769,7 @@ be-mean-project> members
 ]
 ```
 
-## Listando projetos com uma tag específica
+## <a name="listing_projects_by_tag"></a>Listando projetos com uma tag específica
 
 ```js
 be-mean-project> db.projects.find({ tags: 'tag3' }); 
@@ -966,7 +995,7 @@ be-mean-project> db.projects.find({ tags: 'tag3' });
 Fetched 3 record(s) in 7ms
 ```
 
-## Listando apenas os nomes de todas as atividades
+## <a name="listing_activities_names"></a>Listando apenas os nomes de todas as atividades
 
 ```js
 be-mean-project> db.activities.find({}, { _id: 0, name: 1 })
@@ -997,7 +1026,7 @@ be-mean-project> db.activities.find({}, { _id: 0, name: 1 })
 Fetched 8 record(s) in 3ms
 ```
 
-## Listando todos os projetos sem tags
+## <a name="listing_projects_no_tags"></a>Listando todos os projetos sem tags
 
 ```js
 be-mean-project> db.projects.find({ tags: { $exists: false } })
@@ -1006,7 +1035,7 @@ Fetched 0 record(s) in 1ms
 
 P.s.: a query não retorna nada porque não temos nenhum projeto sem tags. :P
 
-## Listando todos os usuários que não fazem parte do primeiro projeto
+## <a name="listing_users_not_first_project"></a>Listando todos os usuários que não fazem parte do primeiro projeto
 
 ```js
 be-mean-project> var projectMembers = [];
@@ -1118,7 +1147,7 @@ be-mean-project> db.users.find({ _id: { $not: { $in: projectMembers } } });
 Fetched 5 record(s) in 6ms
 ```
 
-## Adicionando o campo views com valor 0 em todos os projetos
+## <a name="adding_view"></a>Adicionando o campo views com valor 0 em todos os projetos
 
 ```js
 be-mean-project> var query = {}
@@ -1133,7 +1162,7 @@ WriteResult({
 })
 ```
 
-## Adicionando uma tag nova a cada projeto
+## <a name="adding_new_tag"></a>Adicionando uma tag nova a cada projeto
 
 ```js
 be-mean-project> var query = { name: /project 1/i }
@@ -1187,7 +1216,7 @@ WriteResult({
 })
 ```
 
-## Adicionando 2 novos membros para cada projeto
+## <a name="adding_2_members"></a>Adicionando 2 novos membros para cada projeto
 
 ```js
 be-mean-project> var modifier = { 
@@ -1310,7 +1339,7 @@ WriteResult({
 })
 ```
 
-## Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8)
+## <a name="adding_comment"></a>Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8)
 
 ```js
 be-mean-project> var query = { 
@@ -1340,7 +1369,7 @@ WriteResult({
 })
 ```
 
-## Adicionando um projeto com upsert
+## <a name="adding_project_upsert"></a>Adicionando um projeto com upsert
 
 ```js
 be-mean-project> var query = { name: /project 6/i };
@@ -1390,7 +1419,7 @@ WriteResult({
 })
 ```
 
-## Removendo todos os projetos que não possuem tags
+## <a name="removing_projects_no_tags"></a>Removendo todos os projetos que não possuem tags
 
 ```js
 be-mean-project> var query = { tags: { $exists: false } }
@@ -1401,7 +1430,7 @@ WriteResult({
 })
 ```
 
-## Removendo todos os projetos que não possuem comentários em suas atividades
+## <a name="removing_projects_no_comments"></a>Removendo todos os projetos que não possuem comentários em suas atividades
 
 ```js
 be-mean-project> var activitiesQuery = {
@@ -1431,7 +1460,7 @@ WriteResult({
 })
 ```
 
-## Removendo todos os projetos que não possuem atividades
+## <a name="removing_projects_no_activities"></a>Removendo todos os projetos que não possuem atividades
 
 ```js
 be-mean-project> var query = {
@@ -1444,7 +1473,7 @@ WriteResult({
 })
 ```
 
-## Removendo todos os projetos dos quais dois usuários específicos fazem parte
+## <a name="removing_projects_specific_members"></a>Removendo todos os projetos dos quais dois usuários específicos fazem parte
 
 ```js
 be-mean-project> var query = {
@@ -1466,7 +1495,7 @@ WriteResult({
 })
 ```
 
-## Removendo todos os projetos com uma tag específica em goals
+## <a name="removing_projects_specific_tag"></a>Removendo todos os projetos com uma tag específica em goals
 
 ```js
 var query = {
@@ -1475,7 +1504,7 @@ var query = {
 db.projects.remove(query);
 ```
 
-## Criando um usuário com permisões de leitura apenas
+## <a name="creating_user_read_only"></a>Criando um usuário com permisões de leitura apenas
 
 ```js
 be-mean-project> db.createUser({ user: 'db_user1', pwd: 'password', roles: ['read'] })
@@ -1487,7 +1516,7 @@ Successfully added user: {
 }
 ```
 
-## Criando um usuário com permissões de escrita e leitura
+## <a name="create_user_read_write"></a>Criando um usuário com permissões de escrita e leitura
 
 ```js
 be-mean-project> db.createUser({ user: 'db_user2', pwd: 'password', roles: ['readWrite'] })
@@ -1499,19 +1528,19 @@ Successfully added user: {
 }
 ```
 
-## Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin
+## <a name="granting_useradmin"></a>Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin
 
 ```js
 be-mean-project> db.grantRolesToUser("db_user2", ["userAdmin"])
 ```
 
-## Removendo o papel userAdmin
+## <a name="revoking_useradmin"></a>Removendo o papel userAdmin
 
 ```js
 be-mean-project> db.revokeRolesFromUser("db_user2", ["userAdmin"])
 ```
 
-## Listando todos os usuários e seus papéis
+## <a name="listing_all_users"></a>Listando todos os usuários e seus papéis
 
 ```js
 be-mean-project> db.runCommand({ usersInfo: 1 }).users
@@ -1541,7 +1570,7 @@ be-mean-project> db.runCommand({ usersInfo: 1 }).users
 ]
 ```
 
-## Iniciando um config server
+## <a name="starting_config_server"></a>Iniciando um config server
 
 ```
 $ sudo mkdir /data/configdb
@@ -1550,7 +1579,7 @@ $ sudo mongod --configsvr --port 27019
 2016-05-13T15:52:58.438-0300 I NETWORK  [initandlisten] waiting for connections on port 27019
 ```
 
-## Iniciando um router
+## <a name="starting_router"></a>Iniciando um router
 
 ```
 $ mongos -configdb localhost:27019 --port 27020
@@ -1560,7 +1589,9 @@ $ mongos -configdb localhost:27019 --port 27020
 2016-05-13T15:55:55.710-0300 I NETWORK  [mongosMain] waiting for connections on port 27020
 ```
 
-## Iniciando 2 novas instâncias do MongoDB
+## <a name="starting_shards"></a>Iniciando os shards
+
+Criamos apenas duas novas instâncias do mongo, pois já possuímos uma, a qual contém nossos dados, que vamos utilizar como o primeiro shard.
 
 ```
 $ sudo mkdir /data/shard2
@@ -1588,7 +1619,7 @@ $ sudo mongod --replSet shard1_rs
 ```
 
 
-## Registrando os shards
+## <a name="registering_shards"></a>Registrando os shards
 
 Aqui registramos a instância que já tinhamos, onde temos a database `be-mean-project` com a collection `activities` e as duas novas instâncias do Mongo:
 
@@ -1614,7 +1645,7 @@ bart:27020(mongos-3.2.6)[mongos] test> sh.addShard("localhost:27023")
 }
 ```
 
-## Habilitando sharding para a collection activities na database be-bean-project
+## <a name="enabling_sharding"></a>Habilitando sharding para a collection activities na database be-bean-project
 
 ```
 bart:27020(mongos-3.2.6)[mongos] test> sh.enableSharding("be-mean-project")
@@ -1628,7 +1659,7 @@ bart:27020(mongos-3.2.6)[mongos] test> sh.shardCollection("be-mean-project.activ
 }
 ```
 
-## Criando uma réplica para cada shard
+## <a name="creating_replicaset"></a>Criando uma réplica para cada shard
 
 ```
 $ sudo mkdir /data/shard1_replica
