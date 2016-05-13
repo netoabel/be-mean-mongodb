@@ -1536,8 +1536,205 @@ be-mean-project> db.runCommand({ usersInfo: 1 }).users
 ]
 ```
 
-## Sharding
-// coloque aqui todos os comandos que você executou
+## Iniciando um config server
 
-## Replica
-// coloque aqui todos os comandos que você executou
+```
+$ sudo mkdir /data/configdb
+$ sudo mongod --configsvr --port 27019
+...
+2016-05-13T15:52:58.438-0300 I NETWORK  [initandlisten] waiting for connections on port 27019
+```
+
+## Iniciando um router
+
+```
+$ mongos -configdb localhost:27019 --port 27020
+...
+2016-05-13T15:55:55.690-0300 I SHARDING [Balancer] config servers and shards contacted successfully
+2016-05-13T15:55:55.691-0300 I SHARDING [Balancer] balancer id: bart:27020 started
+2016-05-13T15:55:55.710-0300 I NETWORK  [mongosMain] waiting for connections on port 27020
+```
+
+## Iniciando 2 novas instâncias do MongoDB
+
+```
+$ sudo mkdir /data/shard2
+$ sudo mkdir /data/shard3
+```
+
+```
+$ sudo mongod --replSet shard2_rs --port 27022 --dbpath /data/shard2
+...
+2016-05-13T16:01:03.448-0300 I NETWORK  [initandlisten] waiting for connections on port 27022
+```
+
+```
+$ sudo mongod --replSet shard3_rs --port 27023 --dbpath /data/shard3
+...
+2016-05-13T16:01:37.271-0300 I NETWORK  [initandlisten] waiting for connections on port 27023
+```
+
+## Iniciando a nossa instância existente com o replica set
+
+```
+$ sudo mongod --replSet shard1_rs
+...
+2016-05-13T16:02:06.271-0300 I NETWORK  [initandlisten] waiting for connections on port 27017
+```
+
+
+## Registrando os shards
+
+Aqui registramos a instância que já tinhamos, onde temos a database `be-mean-project` com a collection `activities` e as duas novas instâncias do Mongo:
+
+```js
+$ mongo --port 27020
+MongoDB shell version: 3.2.6
+connecting to: 127.0.0.1:27020/test
+Mongo-Hacker 0.0.13
+bart:27020(mongos-3.2.6)[mongos] test> sh.addShard("localhost:27017")
+{
+  "shardAdded": "shard0000",
+  "ok": 1
+}
+bart:27020(mongos-3.2.6)[mongos] test> sh.addShard("localhost:27022")
+{
+  "shardAdded": "shard0001",
+  "ok": 1
+}
+bart:27020(mongos-3.2.6)[mongos] test> sh.addShard("localhost:27023")
+{
+  "shardAdded": "shard0002",
+  "ok": 1
+}
+```
+
+## Habilitando sharding para a collection activities na database be-bean-project
+
+```
+bart:27020(mongos-3.2.6)[mongos] test> sh.enableSharding("be-mean-project")
+{
+  "ok": 1
+}
+bart:27020(mongos-3.2.6)[mongos] test> sh.shardCollection("be-mean-project.activities", {"_id" : 1})
+{
+  "collectionsharded": "be-mean-project.activities",
+  "ok": 1
+}
+```
+
+## Criando uma réplica para cada shard
+
+```
+$ sudo mkdir /data/shard1_replica
+$ sudo mkdir /data/shard2_replica
+$ sudo mkdir /data/shard3_replica
+```
+
+```
+$ sudo mongod --replSet shard1_rs --port 27031 --dbpath /data/shard1_replica
+...
+2016-05-13T17:28:06.975-0300 I NETWORK  [initandlisten] waiting for connections on port 27031
+```
+
+```
+$ sudo mongod --replSet shard2_rs --port 27032 --dbpath /data/shard2_replica
+...
+2016-05-13T17:28:24.975-0300 I NETWORK  [initandlisten] waiting for connections on port 27032
+```
+
+```
+$ sudo mongod --replSet shard3_rs --port 27033 --dbpath /data/shard3_replica
+...
+2016-05-13T17:28:55.975-0300 I NETWORK  [initandlisten] waiting for connections on port 27032
+```
+
+```
+$ mongo --host localhost --port 27017
+MongoDB shell version: 3.2.6
+connecting to: localhost:27017/test
+Mongo-Hacker 0.0.13
+bart:27017(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27031
+MongoDB shell version: 3.2.6
+connecting to: localhost:27031/test
+Mongo-Hacker 0.0.13
+bart:27031(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27022
+MongoDB shell version: 3.2.6
+connecting to: localhost:27022/test
+Mongo-Hacker 0.0.13
+bart:27022(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27032
+MongoDB shell version: 3.2.6
+connecting to: localhost:27032/test
+Mongo-Hacker 0.0.13
+bart:27032(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27023
+MongoDB shell version: 3.2.6
+connecting to: localhost:27023/test
+Mongo-Hacker 0.0.13
+bart:27023(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27033
+MongoDB shell version: 3.2.6
+connecting to: localhost:27033/test
+Mongo-Hacker 0.0.13
+bart:27033(mongod-3.2.6) test> rs.initiate()
+{
+  "ok": 1
+}
+```
+
+```
+$ mongo --host localhost --port 27017
+MongoDB shell version: 3.2.6
+connecting to: localhost:27017/test
+Mongo-Hacker 0.0.13
+bart:27017(mongod-3.2.6) test> rs.add("127.0.0.1:27031")
+```
+
+```
+$ mongo --host localhost --port 27022
+MongoDB shell version: 3.2.6
+connecting to: localhost:27022/test
+Mongo-Hacker 0.0.13
+bart:27022(mongod-3.2.6) test> rs.add("127.0.0.1:27032")
+```
+
+```
+$ mongo --host localhost --port 27023
+MongoDB shell version: 3.2.6
+connecting to: localhost:27023/test
+Mongo-Hacker 0.0.13
+bart:27023(mongod-3.2.6) test> rs.add("127.0.0.1:27033")
+```
