@@ -57,8 +57,8 @@ Vejamos como ficaria a modelagem relacional a seguir no MongoDB:
     visualizable_mod,
     members: [
         { 
-            user_id,
-            member_type,
+            user_id
+,            member_type,
             notify
         }
     ],
@@ -237,6 +237,7 @@ be-mean-project> db.activities.count()
 Agora, inserimos os projetos:
 
 ```js
+var goal_id = new ObjectId();
 be-mean-project> var project = {
 ...     name: "Project 1",
 ...     description: "Description",
@@ -276,7 +277,8 @@ be-mean-project> var project = {
 ...     ],
 ...     tags: ['tag1', 'tag2', 'tag3'],
 ...     goals: [
-...         {
+...         {   
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -301,6 +303,18 @@ WriteResult({
   "nInserted": 1
 })
 
+be-mean-project> var query = { $or: [{ _id: ObjectId("5734d192a551a48f44c4832b")}, { _id: ObjectId("5734d287a551a48f44c4832d") }] }
+be-mean-project> var modifier = { $set: { goal_id: goal_id } }
+be-mean-project> var options = { multi: true } 
+be-mean-project> db.activities.update(query, modifier, options)
+Updated 2 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 2,
+  "nUpserted": 0,
+  "nModified": 2
+})
+
+var goal_id = new ObjectId();
 be-mean-project> var project = {
 ...     name: "Project 2",
 ...     description: "Description",
@@ -341,6 +355,7 @@ be-mean-project> var project = {
 ...     tags: ['tag2', 'tag3', 'tag4'],
 ...     goals: [
 ...         {
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -365,6 +380,18 @@ WriteResult({
   "nInserted": 1
 })
 
+be-mean-project> var query = { $or: [{ _id: ObjectId("5734d2a0a551a48f44c4832e")}, { _id: ObjectId("5734d2bda551a48f44c4832f") }] }
+be-mean-project> var modifier = { $set: { goal_id: goal_id } }
+be-mean-project> var options = { multi: true }
+be-mean-project> db.activities.update(query, modifier, options)
+Updated 2 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 2,
+  "nUpserted": 0,
+  "nModified": 2
+})
+
+var goal_id = new ObjectId();
 be-mean-project> var project = {
 ...     name: "Project 3",
 ...     description: "Description",
@@ -405,6 +432,7 @@ be-mean-project> var project = {
 ...     tags: ['tag3', 'tag4', 'tag5'],
 ...     goals: [
 ...         {
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -429,6 +457,18 @@ WriteResult({
   "nInserted": 1
 })
 
+be-mean-project> var query = { $or: [{ _id: ObjectId("5734d2daa551a48f44c48330")}, { _id: ObjectId("5734d2ffa551a48f44c48331") }] }
+be-mean-project> var modifier = { $set: { goal_id: goal_id } }
+be-mean-project> var options = { multi: true }
+be-mean-project> db.activities.update(query, modifier, options)
+Updated 2 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 2,
+  "nUpserted": 0,
+  "nModified": 2
+})
+
+var goal_id = new ObjectId();
 be-mean-project> var project = {
 ...     name: "Project 4",
 ...     description: "Description",
@@ -469,6 +509,7 @@ be-mean-project> var project = {
 ...     tags: ['tag4', 'tag5', 'tag6'],
 ...     goals: [
 ...         {
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -493,6 +534,18 @@ WriteResult({
   "nInserted": 1
 })
 
+be-mean-project> var query = { $or: [{ _id: ObjectId("5734d319a551a48f44c48332")}, { _id: ObjectId("5734d332a551a48f44c48333") }] }
+be-mean-project> var modifier = { $set: { goal_id: goal_id } }
+be-mean-project> var options = { multi: true }
+be-mean-project> db.activities.update(query, modifier, options)
+Updated 2 existing record(s) in 2ms
+WriteResult({
+  "nMatched": 2,
+  "nUpserted": 0,
+  "nModified": 2
+})
+
+var goal_id = new ObjectId();
 be-mean-project> var project = {
 ...     name: "Project 5",
 ...     description: "Description",
@@ -533,6 +586,7 @@ be-mean-project> var project = {
 ...     tags: ['tag5', 'tag6', 'tag7'],
 ...     goals: [
 ...         {
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -1128,7 +1182,7 @@ WriteResult({
 })
 ```
 
-## Adicionando 2 novos mebros para cada projeto
+## Adicionando 2 novos membros para cada projeto
 
 ```js
 be-mean-project> var modifier = { 
@@ -1302,9 +1356,9 @@ be-mean-project> var project = {
 ...             notify: true
 ...         }
 ...     ],
-...     tags: ['tag1', 'tag2', 'tag3'],
 ...     goals: [
 ...         {
+...             _id: goal_id,
 ...             name: "Goal",
 ...             description: "Description",
 ...             date_begin: new Date(),
@@ -1331,7 +1385,44 @@ WriteResult({
 })
 ```
 
-## Delete - remoção
+## Removendo todos os projetos que não possuem tags
+
+```js
+be-mean-project> var query = { tags: { $exists: false } }
+be-mean-project> db.projects.remove(query)
+Removed 1 record(s) in 3ms
+WriteResult({
+  "nRemoved": 1
+})
+```
+
+## Removendo todos os projetos que não possuem comentários em suas atividades
+
+```js
+be-mean-project> var activitiesQuery = {
+...   comments: {
+...     $exists: false
+...   }
+... };
+be-mean-project> var activityIds = [];
+be-mean-project> db.activities.find(query).forEach(function(activity) {
+...   activityIds.push(activity._id);
+... });
+be-mean-project> var projectsQuery = {
+...   goals: {
+...     $elemMatch: {
+...       "activities.activity_id": {
+...         $all: activityIds
+...       }
+...     }
+...   }
+... };
+be-mean-project> db.projects.remove(projectsQuery);
+Removed 1 record(s) in 19ms
+WriteResult({
+  "nRemoved": 1
+})
+```
 
 ## Sharding
 // coloque aqui todos os comandos que você executou
