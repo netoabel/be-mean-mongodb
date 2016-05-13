@@ -1470,6 +1470,72 @@ var query = {
 db.projects.remove(query);
 ```
 
+## Criando um usuário com permisões de leitura apenas
+
+```js
+be-mean-project> db.createUser({ user: 'db_user1', pwd: 'password', roles: ['read'] })
+Successfully added user: {
+  "user": "db_user1",
+  "roles": [
+    "read"
+  ]
+}
+```
+
+## Criando um usuário com permissões de escrita e leitura
+
+```js
+be-mean-project> db.createUser({ user: 'db_user2', pwd: 'password', roles: ['readWrite'] })
+Successfully added user: {
+  "user": "db_user2",
+  "roles": [
+    "readWrite"
+  ]
+}
+```
+
+## Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin
+
+```js
+be-mean-project> db.grantRolesToUser("db_user2", ["userAdmin"])
+```
+
+## Removendo o papel userAdmin
+
+```js
+be-mean-project> db.revokeRolesFromUser("db_user2", ["userAdmin"])
+```
+
+## Listando todos os usuários e seus papéis
+
+```js
+be-mean-project> db.runCommand({ usersInfo: 1 }).users
+[
+  {
+    "_id": "be-mean-project.db_user1",
+    "user": "db_user1",
+    "db": "be-mean-project",
+    "roles": [
+      {
+        "role": "read",
+        "db": "be-mean-project"
+      }
+    ]
+  },
+  {
+    "_id": "be-mean-project.db_user2",
+    "user": "db_user2",
+    "db": "be-mean-project",
+    "roles": [
+      {
+        "role": "readWrite",
+        "db": "be-mean-project"
+      }
+    ]
+  }
+]
+```
+
 ## Sharding
 // coloque aqui todos os comandos que você executou
 
