@@ -6,50 +6,50 @@
 
 ## Índice
 
-##### [Introdução](#introduction)
+##### [Introdução](#introdução-1)
 
-* [Caso de uso onde seria interessante utilizar o MongoDB](#when)
+* [Caso de uso onde seria interessante utilizar o MongoDB](#caso-de-uso-onde-seria-interessante-utilizar-o-mongodb)
 
-##### [Modelagem](#modeling)
+##### [Modelagem](#modelagem)
 
-* [Algumas considerações](#considerations)
+* [Algumas considerações](#algumas-considerações)
 
-##### [Operações CRUD](#crud_operations)
+##### [Operações CRUD](#operações-crud)
 
-* [Inserindo usuários](#inserting_users)
-* [Inserindo projetos](#inserting_projects)
-* [Listando dados dos membros de um projeto](#listing_members)
-* [Listando projetos com uma tag específica](#listing_projects_by_tag)
-* [Listando apenas os nomes de todas as atividades](#listing_activities_names)
-* [Listando todos os projetos sem tags](#listing_projects_no_tags)
-* [Listando todos os usuários que não fazem parte do primeiro projeto](#listing_users_not_first_project)
-* [Adicionando o campo views com valor 0 em todos os projetos](#adding_view)
-* [Adicionando uma tag nova a cada projeto](#adding_new_tag)
-* [Adicionando 2 novos membros para cada projeto](#adding_2_members)
-* [Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8](#adding_comment)
-* [Adicionando um projeto com upsert](#adding_project_upsert)
-* [Removendo todos os projetos que não possuem tags](#removing_projects_no_tags)
-* [Removendo todos os projetos que não possuem comentários em suas atividades](#removing_projects_no_comments)
-* [Removendo todos os projetos que não possuem atividades](#removing_projects_no_activities)
-* [Removendo todos os projetos dos quais dois usuários específicos fazem parte](#removing_projects_specific_members)
-* [Removendo todos os projetos com uma tag específica em goals](#removing_projects_specific_tag)
+* [Inserindo usuários](#inserindo-usuários)
+* [Inserindo projetos](#inserindo-projetos)
+* [Listando dados dos membros de um projeto](#listando-dados-dos-membros-de-um-projeto)
+* [Listando projetos com uma tag específica](#listando-projetos-com-uma-tag-específica)
+* [Listando apenas os nomes de todas as atividades](#listando-apenas-os-nomes-de-todas-as-atividades)
+* [Listando todos os projetos sem tags](#listando-todos-os-projetos-sem-tags)
+* [Listando todos os usuários que não fazem parte do primeiro projeto](#listando-todos-os-usuários-que-não-fazem-parte-do-primeiro-projeto)
+* [Adicionando o campo views com valor 0 em todos os projetos](#adicionando-o-campo-views-com-valor-0-em-todos-os-projetos)
+* [Adicionando uma tag nova a cada projeto](#adicionando-uma-tag-nova-a-cada-projeto)
+* [Adicionando 2 novos membros para cada projeto](#adicionando-2-novos-membros-para-cada-projeto)
+* [Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8)](#adicionando-1-comentário-em-cada-atividade-exceto-nas-atividades-7-e-8)
+* [Adicionando um projeto com upsert](#adicionando-um-projeto-com-upsert)
+* [Removendo todos os projetos que não possuem tags](#removendo-todos-os-projetos-que-não-possuem-tags)
+* [Removendo todos os projetos que não possuem comentários em suas atividades](#removendo-todos-os-projetos-que-não-possuem-comentários-em-suas-atividades)
+* [Removendo todos os projetos que não possuem atividades](#removendo-todos-os-projetos-que-não-possuem-atividades)
+* [Removendo todos os projetos dos quais dois usuários específicos fazem parte](#removendo-todos-os-projetos-dos-quais-dois-usuários-específicos-fazem-parte)
+* [Removendo todos os projetos com uma tag específica em goals](#removendo-todos-os-projetos-com-uma-tag-específica-em-goals)
 
-##### [Controle de acesso](#access_control)
+##### [Controle de acesso](#controle-de-acesso-1)
 
-* [Criando um usuário com permisões de leitura apenas](#creating_user_read_only)
-* [Criando um usuário com permissões de escrita e leitura](#create_user_read_write)
-* [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#granting_useradmin)
-* [Removendo o papel userAdmin](#revoking_useradmin)
-* [Listando todos os usuários e seus papéis](#listing_all_users)
+* [Criando um usuário com permisões de leitura apenas](#criando-um-usuário-com-permissões-de-leitura-apenas)
+* [Criando um usuário com permissões de escrita e leitura](#criando-um-usuário-com-permissões-de-escrita-e-leitura)
+* [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#habilitando-as-ações-grantrole-e-revokerole-em-um-usuário-através-do-papel-useradmin)
+* [Removendo o papel userAdmin](#removendo-o-papel-useradmin)
+* [Listando todos os usuários e seus papéis](#listando-todos-os-usuários-e-seus-papéis)
 
-##### [Sharding e replica set](#sharding)
+##### [Sharding e replica set](#sharding-e-replica-set-1)
 
-* [Iniciando um config server](#starting_config_server)
-* [Iniciando um router](#starting_router)
-* [Iniciando os shards](#starting_shards)
-* [Registrando os shards](#registering_shards)
-* [Habilitando sharding para a collection activities na database be-bean-project](#enabling_sharding)
-* [Criando uma réplica para cada shard](#creating_replicaset)
+* [Iniciando um config server](#iniciando-um-config-server)
+* [Iniciando um router](#iniciando-um-router)
+* [Iniciando os shards](#iniciando-os-shards)
+* [Registrando os shards](#registrando-os-shards)
+* [Habilitando sharding para a collection activities na database be-mean-project](#habilitando-sharding-para-a-collection-activities-na-database-be-mean-project)
+* [Criando uma réplica para cada shard](#criando-uma-réplica-para-cada-shard)
 
 # <a name="introduction"></a>Introdução
 
@@ -1666,7 +1666,7 @@ bart:27020(mongos-3.2.6)[mongos] test> sh.addShard("localhost:27023")
 }
 ```
 
-## <a name="enabling_sharding"></a>Habilitando sharding para a collection activities na database be-bean-project
+## <a name="enabling_sharding"></a>Habilitando sharding para a collection activities na database be-mean-project
 
 ```
 bart:27020(mongos-3.2.6)[mongos] test> sh.enableSharding("be-mean-project")
