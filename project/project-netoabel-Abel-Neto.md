@@ -65,7 +65,7 @@ Além disso, diferentes dispositivos possuem diferentes modelagens no banco. Mod
 
 Vejamos como ficaria a modelagem relacional a seguir no MongoDB: 
 
-![](./modeling/relational.jpg)
+![](https://raw.githubusercontent.com/netoabel/be-mean-instagram-mongodb-projects/master/modeling/relational.jpg)
 
 ### Collection users
 
