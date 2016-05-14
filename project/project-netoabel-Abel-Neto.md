@@ -36,7 +36,7 @@
 
 ##### [Controle de acesso](#controle-de-acesso-1)
 
-* [Criando um usuário com permisões de leitura apenas](#criando-um-usuário-com-permissões-de-leitura-apenas)
+* [Criando um usuário com permissões de leitura apenas](#criando-um-usuário-com-permissões-de-leitura-apenas)
 * [Criando um usuário com permissões de escrita e leitura](#criando-um-usuário-com-permissões-de-escrita-e-leitura)
 * [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#habilitando-as-ações-grantrole-e-revokerole-em-um-usuário-através-do-papel-useradmin)
 * [Removendo o papel userAdmin](#removendo-o-papel-useradmin)
@@ -1523,7 +1523,7 @@ db.projects.remove(query);
 
 # <a name="access_control"></a>Controle de acesso
 
-## <a name="creating_user_read_only"></a>Criando um usuário com permisões de leitura apenas
+## <a name="creating_user_read_only"></a>Criando um usuário com permissões de leitura apenas
 
 ```js
 be-mean-project> db.createUser({ user: 'db_user1', pwd: 'password', roles: ['read'] })
