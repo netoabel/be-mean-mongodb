@@ -7,10 +7,15 @@
 ## Índice
 
 ##### [Introdução](#introduction)
+
 * [Caso de uso onde seria interessante utilizar o MongoDB](#when)
+
 ##### [Modelagem](#modeling)
+
 * [Algumas considerações](#considerations)
+
 ##### [Operações CRUD](#crud_operations)
+
 * [Inserindo usuários](#inserting_users)
 * [Inserindo projetos](#inserting_projects)
 * [Listando dados dos membros de um projeto](#listing_members)
@@ -28,13 +33,17 @@
 * [Removendo todos os projetos que não possuem atividades](#removing_projects_no_activities)
 * [Removendo todos os projetos dos quais dois usuários específicos fazem parte](#removing_projects_specific_members)
 * [Removendo todos os projetos com uma tag específica em goals](#removing_projects_specific_tag)
+
 ##### [Controle de acesso](#access_control)
+
 * [Criando um usuário com permisões de leitura apenas](#creating_user_read_only)
 * [Criando um usuário com permissões de escrita e leitura](#create_user_read_write)
 * [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#granting_useradmin)
 * [Removendo o papel userAdmin](#revoking_useradmin)
 * [Listando todos os usuários e seus papéis](#listing_all_users)
+
 ##### [Sharding e replica set](#sharding)
+
 * [Iniciando um config server](#starting_config_server)
 * [Iniciando um router](#starting_router)
 * [Iniciando os shards](#starting_shards)
