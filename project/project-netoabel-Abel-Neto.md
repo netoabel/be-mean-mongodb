@@ -6,37 +6,43 @@
 
 ## Índice
 
-1. [Caso de uso onde seria interessante utilizar o MongoDB](#when)
-2. [Modelagem](#modeling)
-3. [Algumas considerações](#considerations)
-4. [Inserindo usuários](#inserting_users)
-5. [Inserindo projetos](#inserting_projects)
-6. [Listando dados dos membros de um projeto](#listing_members)
-7. [Listando projetos com uma tag específica](#listing_projects_by_tag)
-8. [Listando apenas os nomes de todas as atividades](#listing_activities_names)
-9. [Listando todos os projetos sem tags](#listing_projects_no_tags)
-10. [Listando todos os usuários que não fazem parte do primeiro projeto](#listing_users_not_first_project)
-11. [Adicionando o campo views com valor 0 em todos os projetos](#adding_view)
-12. [Adicionando uma tag nova a cada projeto](#adding_new_tag)
-13. [Adicionando 2 novos membros para cada projeto](#adding_2_members)
-14. [Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8](#adding_comment)
-15. [Adicionando um projeto com upsert](#adding_project_upsert)
-16. [Removendo todos os projetos que não possuem tags](#removing_projects_no_tags)
-17. [Removendo todos os projetos que não possuem comentários em suas atividades](#removing_projects_no_comments)
-18. [Removendo todos os projetos que não possuem atividades](#removing_projects_no_activities)
-19. [Removendo todos os projetos dos quais dois usuários específicos fazem parte](#removing_projects_specific_members)
-20. [Removendo todos os projetos com uma tag específica em goals](#removing_projects_specific_tag)
-21. [Criando um usuário com permisões de leitura apenas](#creating_user_read_only)
-22. [Criando um usuário com permissões de escrita e leitura](#create_user_read_write)
-23. [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#granting_useradmin)
-24. [Removendo o papel userAdmin](#revoking_useradmin)
-25. [Listando todos os usuários e seus papéis](#listing_all_users)
-26. [Iniciando um config server](#starting_config_server)
-27. [Iniciando um router](#starting_router)
-28. [Iniciando os shards](#starting_shards)
-29. [Registrando os shards](#registering_shards)
-30. [Habilitando sharding para a collection activities na database be-bean-project](#enabling_sharding)
-31. [Criando uma réplica para cada shard](#creating_replicaset)
+##### [Introdução](#introduction)
+* [Caso de uso onde seria interessante utilizar o MongoDB](#when)
+##### [Modelagem](#modeling)
+* [Algumas considerações](#considerations)
+##### [Operações CRUD](#crud_operations)
+* [Inserindo usuários](#inserting_users)
+* [Inserindo projetos](#inserting_projects)
+* [Listando dados dos membros de um projeto](#listing_members)
+* [Listando projetos com uma tag específica](#listing_projects_by_tag)
+* [Listando apenas os nomes de todas as atividades](#listing_activities_names)
+* [Listando todos os projetos sem tags](#listing_projects_no_tags)
+* [Listando todos os usuários que não fazem parte do primeiro projeto](#listing_users_not_first_project)
+* [Adicionando o campo views com valor 0 em todos os projetos](#adding_view)
+* [Adicionando uma tag nova a cada projeto](#adding_new_tag)
+* [Adicionando 2 novos membros para cada projeto](#adding_2_members)
+* [Adicionando 1 comentário em cada atividade (exceto nas atividades 7 e 8](#adding_comment)
+* [Adicionando um projeto com upsert](#adding_project_upsert)
+* [Removendo todos os projetos que não possuem tags](#removing_projects_no_tags)
+* [Removendo todos os projetos que não possuem comentários em suas atividades](#removing_projects_no_comments)
+* [Removendo todos os projetos que não possuem atividades](#removing_projects_no_activities)
+* [Removendo todos os projetos dos quais dois usuários específicos fazem parte](#removing_projects_specific_members)
+* [Removendo todos os projetos com uma tag específica em goals](#removing_projects_specific_tag)
+##### [Controle de acesso](#access_control)
+* [Criando um usuário com permisões de leitura apenas](#creating_user_read_only)
+* [Criando um usuário com permissões de escrita e leitura](#create_user_read_write)
+* [Habilitando as ações grantRole e revokeRole em um usuário através do papel userAdmin](#granting_useradmin)
+* [Removendo o papel userAdmin](#revoking_useradmin)
+* [Listando todos os usuários e seus papéis](#listing_all_users)
+##### [Sharding e replica set](#sharding)
+* [Iniciando um config server](#starting_config_server)
+* [Iniciando um router](#starting_router)
+* [Iniciando os shards](#starting_shards)
+* [Registrando os shards](#registering_shards)
+* [Habilitando sharding para a collection activities na database be-bean-project](#enabling_sharding)
+* [Criando uma réplica para cada shard](#creating_replicaset)
+
+# <a name="introduction"></a>Introdução
 
 ## <a name="when"></a>Caso de uso onde seria interessante utilizar o MongoDB
 
@@ -46,7 +52,7 @@ Um caso onde eu o utilizaria (e de fato utilizo) é o meu TCC, que é um projeto
 
 Além disso, diferentes dispositivos possuem diferentes modelagens no banco. Modelar esse tipo de estrutura é muito mais fácil no MongoDB. Incluir novas estruturas e tipos de dispositivos não é um problema, por exemplo.
 
-## <a name="modeling"></a>Modelagem
+# <a name="modeling"></a>Modelagem
 
 Vejamos como ficaria a modelagem relacional a seguir no MongoDB: 
 
@@ -166,6 +172,8 @@ Poderíamos ter criado apenas uma collection `projects` com todos os documentos 
 Ao criar uma collection `activities` separada, fazemos com que cada atividade seja armazenada como um novo documento. Além de evitar a extrapolação do limite, esse formato evita que um único documento use uma quantidade excessiva de memória RAM ou consuma uma largura de banda muito grande durante uma transmissão.
 
 No caso dos comentários, como é muito pouco provável que a quantidade de comentários em uma única atividade cresça a ponto de fazer com que um documento da collection `activities` se torne muito grande, optamos por mantê-los em um array interno a essa collection, a fim de tornar o acesso a eles mais fácil e performático.
+
+# <a name="crud_operations"></a> Operações CRUD
 
 ## <a name="inserting_users"></a>Inserindo usuários
 
@@ -1504,6 +1512,8 @@ var query = {
 db.projects.remove(query);
 ```
 
+# <a name="access_control"></a>Controle de acesso
+
 ## <a name="creating_user_read_only"></a>Criando um usuário com permisões de leitura apenas
 
 ```js
@@ -1569,6 +1579,8 @@ be-mean-project> db.runCommand({ usersInfo: 1 }).users
   }
 ]
 ```
+
+# <a name="sharding"></a>Sharding e replica set
 
 ## <a name="starting_config_server"></a>Iniciando um config server
 
